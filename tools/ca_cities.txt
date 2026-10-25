@@ -1,0 +1,238 @@
+Los Angeles|Los Angeles
+San Diego|San Diego
+San Jose|Santa Clara
+San Francisco|San Francisco
+Fresno|Fresno
+Sacramento|Sacramento
+Long Beach|Los Angeles
+Oakland|Alameda
+Bakersfield|Kern
+Anaheim|Orange
+Stockton|San Joaquin
+Riverside|Riverside
+Santa Ana|Orange
+Irvine|Orange
+Chula Vista|San Diego
+Fremont|Alameda
+Santa Clarita|Los Angeles
+San Bernardino|San Bernardino
+Modesto|Stanislaus
+Moreno Valley|Riverside
+Fontana|San Bernardino
+Glendale|Los Angeles
+Huntington Beach|Orange
+Oxnard|Ventura
+Ontario|San Bernardino
+Rancho Cucamonga|San Bernardino
+Santa Rosa|Sonoma
+Oceanside|San Diego
+Garden Grove|Orange
+Elk Grove|Sacramento
+Lancaster|Los Angeles
+Palmdale|Los Angeles
+Corona|Riverside
+Salinas|Monterey
+Pomona|Los Angeles
+Roseville|Placer
+Sunnyvale|Santa Clara
+Escondido|San Diego
+Hayward|Alameda
+Torrance|Los Angeles
+Visalia|Tulare
+Pasadena|Los Angeles
+Orange|Orange
+Fullerton|Orange
+Victorville|San Bernardino
+Santa Clara|Santa Clara
+Simi Valley|Ventura
+Thousand Oaks|Ventura
+Concord|Contra Costa
+Vallejo|Solano
+Berkeley|Alameda
+Murrieta|Riverside
+Fairfield|Solano
+Temecula|Riverside
+Clovis|Fresno
+Antioch|Contra Costa
+Richmond|Contra Costa
+Menifee|Riverside
+Carlsbad|San Diego
+Costa Mesa|Orange
+Jurupa Valley|Riverside
+Santa Maria|Santa Barbara
+Downey|Los Angeles
+El Monte|Los Angeles
+West Covina|Los Angeles
+Daly City|San Mateo
+Burbank|Los Angeles
+San Mateo|San Mateo
+Rialto|San Bernardino
+Vista|San Diego
+El Cajon|San Diego
+Inglewood|Los Angeles
+Ventura|Ventura
+Vacaville|Solano
+San Marcos|San Diego
+Hesperia|San Bernardino
+Compton|Los Angeles
+Chico|Butte
+Tracy|San Joaquin
+Mission Viejo|Orange
+Redding|Shasta
+Indio|Riverside
+Santa Monica|Los Angeles
+Chino|San Bernardino
+Carson|Los Angeles
+Westminster|Orange
+Santa Barbara|Santa Barbara
+Norwalk|Los Angeles
+Redwood City|San Mateo
+Hawthorne|Los Angeles
+Newport Beach|Orange
+Livermore|Alameda
+Whittier|Los Angeles
+Citrus Heights|Sacramento
+Lake Forest|Orange
+Buena Park|Orange
+Alhambra|Los Angeles
+Mountain View|Santa Clara
+Redlands|San Bernardino
+Chino Hills|San Bernardino
+Hemet|Riverside
+Perris|Riverside
+Lakewood|Los Angeles
+Merced|Merced
+Milpitas|Santa Clara
+Alameda|Alameda
+Folsom|Sacramento
+Upland|San Bernardino
+Tustin|Orange
+Baldwin Park|Los Angeles
+San Leandro|Alameda
+Napa|Napa
+Turlock|Stanislaus
+Pleasanton|Alameda
+Manteca|San Joaquin
+Pittsburg|Contra Costa
+Lynwood|Los Angeles
+Redondo Beach|Los Angeles
+Davis|Yolo
+Yuba City|Sutter
+Camarillo|Ventura
+Union City|Alameda
+Walnut Creek|Contra Costa
+Lodi|San Joaquin
+Apple Valley|San Bernardino
+Rancho Cordova|Sacramento
+Yorba Linda|Orange
+Laguna Niguel|Orange
+Palo Alto|Santa Clara
+San Ramon|Contra Costa
+Madera|Madera
+Tulare|Tulare
+Brentwood|Contra Costa
+Eastvale|Riverside
+Montebello|Los Angeles
+Dublin|Alameda
+San Clemente|Orange
+Encinitas|San Diego
+Monterey Park|Los Angeles
+Gardena|Los Angeles
+Cupertino|Santa Clara
+Santa Cruz|Santa Cruz
+Huntington Park|Los Angeles
+La Habra|Orange
+Petaluma|Sonoma
+Rocklin|Placer
+Porterville|Tulare
+National City|San Diego
+Arcadia|Los Angeles
+Palm Desert|Riverside
+Lincoln|Placer
+San Rafael|Marin
+Novato|Marin
+Hanford|Kings
+Gilroy|Santa Clara
+Fountain Valley|Orange
+La Mesa|San Diego
+Diamond Bar|Los Angeles
+Paramount|Los Angeles
+Cathedral City|Riverside
+Aliso Viejo|Orange
+Rosemead|Los Angeles
+Glendora|Los Angeles
+Palm Springs|Riverside
+Santee|San Diego
+Azusa|Los Angeles
+Poway|San Diego
+Rancho Santa Margarita|Orange
+San Luis Obispo|San Luis Obispo
+Covina|Los Angeles
+Cerritos|Los Angeles
+Ceres|Stanislaus
+Beaumont|Riverside
+San Jacinto|Riverside
+Cypress|Orange
+Lake Elsinore|Riverside
+Morgan Hill|Santa Clara
+Los Banos|Merced
+Colton|San Bernardino
+Culver City|Los Angeles
+Bell Gardens|Los Angeles
+Rancho Palos Verdes|Los Angeles
+Yucaipa|San Bernardino
+Pico Rivera|Los Angeles
+Danville|Contra Costa
+Lompoc|Santa Barbara
+Montclair|San Bernardino
+Coachella|Riverside
+Placentia|Orange
+Brea|Orange
+Oakley|Contra Costa
+Newark|Alameda
+Campbell|Santa Clara
+Lincoln Heights|Los Angeles
+Watsonville|Santa Cruz
+Rohnert Park|Sonoma
+Wildomar|Riverside
+Paso Robles|San Luis Obispo
+Calexico|Imperial
+El Centro|Imperial
+Monterey|Monterey
+Seaside|Monterey
+Marina|Monterey
+Hollister|San Benito
+Eureka|Humboldt
+Truckee|Nevada
+South Lake Tahoe|El Dorado
+El Dorado Hills|El Dorado
+Auburn|Placer
+Woodland|Yolo
+West Sacramento|Yolo
+Manhattan Beach|Los Angeles
+Hermosa Beach|Los Angeles
+Beverly Hills|Los Angeles
+West Hollywood|Los Angeles
+Calabasas|Los Angeles
+Agoura Hills|Los Angeles
+Malibu|Los Angeles
+Laguna Beach|Orange
+Dana Point|Orange
+San Juan Capistrano|Orange
+Seal Beach|Orange
+Los Alamitos|Orange
+Stanton|Orange
+La Palma|Orange
+Oxnard Shores|Ventura
+Port Hueneme|Ventura
+Moorpark|Ventura
+Fillmore|Ventura
+Santa Paula|Ventura
+Ojai|Ventura
+Goleta|Santa Barbara
+Carpinteria|Santa Barbara
+Atascadero|San Luis Obispo
+Arroyo Grande|San Luis Obispo
+Grover Beach|San Luis Obispo
+Pismo Beach|San Luis Obispo
+Morro Bay|San Luis Obispo
