@@ -4,7 +4,7 @@ Static site, no build step, ready for GitHub Pages.
 
 ## Before you publish
 
-One placeholder remains: `https://formspree.io/f/YOUR_FORM_ID` in `contact.html` — replace it with your form endpoint (see *Quote form* below). Phone, email, license number and NPN are already filled in.
+The quote form posts to Formspree (endpoint in `contact.html` and `tools/build_site.py`). Phone, email, license number and NPN are already filled in.
 
 ## Deploy to GitHub Pages
 

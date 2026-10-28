@@ -77,7 +77,7 @@ def page(path, title, desc, body, depth=0):
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="{p}assets/style.css">
 <link rel="canonical" href="https://planforcoverage.com/{path if path!="index.html" else ""}">
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"InsuranceAgency","name":"Plan For Coverage","founder":{{"@type":"Person","name":"Eric Becker"}},"url":"https://planforcoverage.com/","telephone":"{PHONE_TEL}","email":"{EMAIL}","areaServed":[{",".join('{{"@type":"State","name":"'+st+'"}}' for st in STATES)}],"knowsAbout":["Health insurance","Covered California","Major medical","Accident insurance","Hospital indemnity","Critical illness insurance","Dental insurance","Vision insurance"]}}</script>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"InsuranceAgency","name":"Plan For Coverage","founder":{{"@type":"Person","name":"Eric Becker"}},"url":"https://planforcoverage.com/","telephone":"{PHONE_TEL}","email":"{EMAIL}","areaServed":[{",".join('{"@type":"State","name":"'+st+'"}' for st in STATES)}],"knowsAbout":["Health insurance","Covered California","Major medical","Accident insurance","Hospital indemnity","Critical illness insurance","Dental insurance","Vision insurance"]}}</script>
 </head>
 <body>
 {nav(depth)}
@@ -301,12 +301,12 @@ page("about.html","About","Plan For Coverage is a solo independent health and li
 
 # ---------- CONTACT ----------
 state_opts = "".join(f'<option>{s}</option>' for s in STATES) + '<option>Other (I may be able to refer you)</option>'
-svc_opts = "".join(f'<option>{n}</option>' for _,n,_ in SERVICES) + '<option>Medicare referral</option><option>Not sure yet</option>'
+svc_opts = '<option value="">Choose one</option>' + "".join(f'<option>{n}</option>' for _,n,_ in SERVICES) + '<option>Medicare referral</option><option>Not sure yet</option>'
 contact = f"""
 <section class="page-head"><div class="wrap"><h1>Request a quote</h1>
 <p class="lede">Send a few details and I'll reply within one business day with options. Prefer to talk? Call <a href="tel:{PHONE_TEL}">{PHONE}</a>.</p></div></section>
 <section class="detail"><div class="wrap two">
-  <form class="quote-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+  <form class="quote-form" action="https://formspree.io/f/mdeegqng" method="POST">
     <label>Name <input name="name" required autocomplete="name"></label>
     <label>Email <input type="email" name="email" required autocomplete="email"></label>
     <label>Phone <input type="tel" name="phone" autocomplete="tel"></label>
