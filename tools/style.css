@@ -158,6 +158,9 @@ a:hover{color:var(--amber-dark)}
 .plan-card dl{margin:1em 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 16px;font-size:.95rem}
 .plan-card dt{color:var(--slate)}
 .plan-card dd{margin:0}
+.plan-card .enroll{margin:1.1em 0 0}
+.plan-card .enroll a{display:inline-block;background:var(--navy);color:#fff;padding:.6rem 1.3rem;border-radius:var(--radius);text-decoration:none;font-weight:600}
+.plan-card .enroll a:hover{filter:brightness(1.15)}
 .quote-status{margin-top:16px;color:var(--slate);scroll-margin-top:96px}
 .quote-error{color:#8a1f1f;background:#fdf0f0;border:1px solid #e8b4b4;border-radius:var(--radius);padding:14px 18px}
 .quote-info{color:var(--ink);background:var(--mist);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:var(--radius);padding:14px 18px}

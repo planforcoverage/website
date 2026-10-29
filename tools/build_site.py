@@ -349,7 +349,7 @@ quote = """
     <h2>What happens next</h2>
     <p>Use the estimates to narrow it down, then <a href="contact.html">send a quote request</a> or call <a href="tel:+14243629253">(424) 362-9253</a> and I'll help you enroll — through Covered California in California, Explore Health in Oregon, Georgia Access in Georgia, or HealthSherpa in the other states I serve.</p>
     <h2>Good to know</h2>
-    <p>Plans marked as not directly enrollable here are quote/display only; enrollment for those goes through the state exchange or with my help. Subsidy amounts shown are estimates based on the income you entered.</p>
+    <p>These are estimates, not an offer of coverage. When you're ready, use <strong>Enroll with us</strong> on any plan and I'll help you complete enrollment through the right exchange. Subsidy amounts shown are estimates based on the income you entered.</p>
   </div>
 </div></section>
 <section class="detail"><div class="wrap">
@@ -435,8 +435,8 @@ quote = """
       + '<dt>Metal level</dt><dd>' + esc(det.metal_level ? metalLabel(det.metal_level) : '—') + '</dd>'
       + '<dt>Plan type</dt><dd>' + esc(det.plan_type ? typeLabel(det.plan_type) : '—') + '</dd>'
       + '<dt>Deductible (individual)</dt><dd>' + money(det.deductible_individual) + '</dd>'
-      + '<dt>Out-of-pocket max (individual)</dt><dd>' + money(det.moop_individual) + '</dd>'
-      + '<dt>Direct enrollment here</dt><dd>' + (p.api_enrollable ? 'Yes' : 'No — via exchange / broker help') + '</dd></dl>'
+      + '<dt>Out-of-pocket max (individual)</dt><dd>' + money(det.moop_individual) + '</dd></dl>'
+      + '<p class="enroll"><a href="contact.html">Enroll with us</a></p>'
       + (links.length ? '<p>' + links.join(' · ') + '</p>' : '')
       + '</article>';
   }
