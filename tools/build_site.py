@@ -244,7 +244,8 @@ svc_page("dental","Dental",
  ["Adults whose health plan has no dental benefit","Families with kids heading into braces","Anyone putting off a crown or implant because of cost"],
  ["Cleanings, exams and X‑rays, usually at no cost","Fillings and extractions","Crowns, bridges, root canals and dentures","Orthodontia on select plans"],
  """<p>Watch for waiting periods on major work and annual maximums (commonly $1,000–$2,000). I'll point out which plans waive waiting periods if you've had prior coverage.</p>
- <p>Dental and vision can often be bundled for a small discount.</p>""")
+ <p>Dental and vision can often be bundled for a small discount.</p>
+ <p><strong>Ready when you are:</strong> <a href="https://enrollment.ncd.com/638041" target="_blank" rel="noopener">my National Care Dental enrollment page</a> shows current plans and rates, and enrolls you on the spot.</p>""")
 
 svc_page("vision","Vision",
  "Low‑cost plans that cover eye exams, glasses and contacts at a predictable price, with discounts on LASIK and extra pairs.",
