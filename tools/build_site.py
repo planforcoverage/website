@@ -53,7 +53,7 @@ def footer(depth, p=None):
       <h3>Eric Becker, broker</h3>
       <p>Cell: <a href="tel:{PHONE_TEL}">{PHONE}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
       <h3>Hours</h3>
-      <p>Monday – Friday, 9:00 am – 5:00 pm Pacific<br>Evenings and weekends by appointment</p>
+      <p>All conversations are by appointment.</p>
     </div>
     <div>
       <h3>Pages</h3>
@@ -325,7 +325,7 @@ contact = f"""
     <h2>What happens next</h2>
     <p>I'll look at the carriers available in your state, check the doctors and prescriptions you listed, and send back two or three plans with the trade‑offs explained. Then we can talk, or you can enroll with my help.</p>
     <h2>Hours</h2>
-    <p>Monday – Friday, 9:00 am – 5:00 pm Pacific<br>Evenings and weekends by appointment</p>
+    <p>All conversations are by appointment. Send the form above or call/text <a href="tel:+14243629253">(424) 362-9253</a> and we’ll find a time that works.</p>
     <h2>Already a client?</h2>
     <p>Call or email any time about claims, ID cards, network changes or 1095‑A forms.</p>
   </div>
@@ -357,7 +357,7 @@ quote = """
   </form>
   <div class="notes">
     <h2>What happens next</h2>
-    <p>Use the estimates to narrow it down, then <a href="contact.html">send a quote request</a> or call <a href="tel:+14243629253">(424) 362-9253</a> and I'll help you enroll — through Covered California in California, Explore Health in Oregon, Georgia Access in Georgia, or HealthSherpa in the other states I serve.</p>
+    <p>Use the estimates to narrow it down, then <a href="contact.html">send a quote request</a> or call/text <a href="tel:+14243629253">(424) 362-9253</a> to set up a time, and I'll help you enroll — through Covered California in California, Explore Health in Oregon, Georgia Access in Georgia, or HealthSherpa in the other states I serve.</p>
     <h2>Good to know</h2>
     <p>These are estimates, not an offer of coverage. When you're ready, use <strong>Enroll with us</strong> on any plan and I'll help you complete enrollment through the right exchange. Subsidy amounts shown are estimates based on the income you entered.</p>
   </div>
