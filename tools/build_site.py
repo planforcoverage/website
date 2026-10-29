@@ -17,8 +17,8 @@ SERVICES = [
  ("vision","Vision","Exams, frames, lenses and contacts at a predictable cost."),
 ]
 
-def nav(depth):
-    p = "../" * depth
+def nav(depth, p=None):
+    p = "../" * depth if p is None else p
     svc = "".join(f'<li><a href="{p}services/{s}.html">{n}</a></li>' for s,n,_ in SERVICES)
     return f"""
 <header class="site-header">
@@ -39,8 +39,8 @@ def nav(depth):
   </nav>
 </header>"""
 
-def footer(depth):
-    p = "../" * depth
+def footer(depth, p=None):
+    p = "../" * depth if p is None else p
     return f"""
 <footer class="site-footer">
   <div class="foot-grid">
@@ -64,8 +64,10 @@ def footer(depth):
 </footer>
 <script src="{p}assets/site.js"></script>"""
 
-def page(path, title, desc, body, depth=0):
-    p = "../" * depth
+def page(path, title, desc, body, depth=0, p=None, noindex=False):
+    p = "../" * depth if p is None else p
+    canon = path if path != "index.html" else ""
+    head_meta = '<meta name="robots" content="noindex">' if noindex else f'<link rel="canonical" href="https://planforcoverage.com/{canon}">'
     html = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -76,15 +78,15 @@ def page(path, title, desc, body, depth=0):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="{p}assets/style.css">
-<link rel="canonical" href="https://planforcoverage.com/{path if path!="index.html" else ""}">
+{head_meta}
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"InsuranceAgency","name":"Plan For Coverage","founder":{{"@type":"Person","name":"Eric Becker"}},"url":"https://planforcoverage.com/","telephone":"{PHONE_TEL}","email":"{EMAIL}","areaServed":[{",".join('{"@type":"State","name":"'+st+'"}' for st in STATES)}],"knowsAbout":["Health insurance","Covered California","Major medical","Accident insurance","Hospital indemnity","Critical illness insurance","Dental insurance","Vision insurance"]}}</script>
 </head>
 <body>
-{nav(depth)}
+{nav(depth, p)}
 <main>
 {body}
 </main>
-{footer(depth)}
+{footer(depth, p)}
 </body>
 </html>"""
     full = os.path.join(OUT, path)
@@ -336,9 +338,9 @@ quote = """
 <p class="lede">Instant estimates for plan year 2027. Enter a ZIP code, ages, and an annual household income estimate, and see plans sorted cheapest first. This is an estimate, not an offer of coverage — the final premium and tax credit are determined when you apply.</p></div></section>
 <section class="detail"><div class="wrap two">
   <form class="quote-form" id="live-quote-form">
-    <label>ZIP code <input name="zip" inputmode="numeric" pattern="\\d{5}" maxlength="5" required placeholder="e.g. 91724"></label>
-    <label>Ages, comma-separated <input name="ages" required placeholder="e.g. 40 or 40, 38"></label>
-    <label>Annual household income estimate ($) <input name="income" type="number" min="0" step="1000" required placeholder="e.g. 40000"></label>
+    <label>ZIP code <input name="zip" inputmode="numeric" pattern="\\d{5}" maxlength="5" required autocomplete="postal-code" placeholder="e.g. 91724"></label>
+    <label>Ages of everyone who needs coverage, comma-separated <input name="ages" required autocomplete="off" placeholder="e.g. 40 or 40, 38, 9"></label>
+    <label>Annual household income estimate ($) <input name="income" inputmode="numeric" required autocomplete="off" placeholder="e.g. 40000"></label>
     <label class="check"><input type="checkbox" name="tobacco"> Primary applicant uses tobacco</label>
     <button class="btn btn-amber" type="submit">Get live quotes</button>
     <p class="form-note">Plan year 2027, coverage effective January 1, 2027. No name, date of birth, or Social Security number is collected by this tool. ZIP, ages, income estimate, and tobacco status are sent to the quoting service only to generate these estimates, and nothing is stored on this site.</p>
@@ -354,13 +356,13 @@ quote = """
   <div id="quote-status" class="quote-status" role="status"></div>
   <div id="quote-results" class="plan-grid"></div>
   <div id="quote-fallback">
-    <div class="quote-error"><p><strong>Live quotes are unavailable right now.</strong> Send the details below instead and I'll reply within one business day with options.</p></div>
-    <form class="quote-form" action="https://formspree.io/f/mdeegqng" method="POST" style="margin-top:20px">
+    <div id="quote-fallback-msg" class="quote-error"><p><strong>Live quotes are unavailable right now.</strong> Send the details below instead and I'll reply within one business day with options.</p></div>
+    <form class="quote-form" id="quote-fallback-form" action="https://formspree.io/f/mdeegqng" method="POST" style="margin-top:20px">
       <label>Name <input name="name" required autocomplete="name"></label>
       <label>Email <input type="email" name="email" required autocomplete="email"></label>
-      <label>ZIP code <input name="zip" inputmode="numeric" pattern="\\d{5}" maxlength="5"></label>
+      <label>ZIP code <input name="zip" inputmode="numeric" pattern="\\d{5}" maxlength="5" autocomplete="postal-code"></label>
       <label>Ages <input name="ages" placeholder="e.g. 40 or 40, 38"></label>
-      <label>Annual household income estimate <input name="income" type="number" min="0" step="1000"></label>
+      <label>Annual household income estimate <input name="income" inputmode="numeric"></label>
       <label>Anything else? <textarea name="notes" rows="4" placeholder="Doctors, prescriptions, budget, when you need coverage"></textarea></label>
       <input type="hidden" name="interest" value="Live quote request (API fallback)">
       <button class="btn btn-amber" type="submit">Send quote request</button>
@@ -370,56 +372,126 @@ quote = """
 <script>
 (function(){
   var form = document.getElementById('live-quote-form');
+  var button = form.querySelector('button[type="submit"]');
   var status = document.getElementById('quote-status');
   var results = document.getElementById('quote-results');
   var fallback = document.getElementById('quote-fallback');
+  var fallbackMsg = document.getElementById('quote-fallback-msg');
+  var fallbackForm = document.getElementById('quote-fallback-form');
+  var PAGE_SIZE = 20; // page.size the quote API requests from HealthSherpa ONE
+  var seq = 0;
   function money(v){
-    if (v === null || v === undefined || v === '') return '—';
+    if (v === null || v === undefined || v === '' || typeof v === 'object') return '—';
     var n = Number(v);
-    return isNaN(n) ? String(v) : '$' + n.toFixed(2);
+    return isNaN(n) ? String(v) : '$' + n.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
   }
   function esc(s){
     return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
   }
+  function safeUrl(u){
+    return /^https?:/i.test(String(u || '')) ? String(u) : '';
+  }
+  function netOf(p){
+    var v = p && p.pricing ? p.pricing.net_premium : null;
+    if (v === null || v === undefined || v === '') return Infinity;
+    var n = Number(v);
+    return isNaN(n) ? Infinity : n;
+  }
+  function detailText(d){
+    if (typeof d === 'string') return d;
+    if (Array.isArray(d)) return d.map(function(x){ return x && x.msg ? x.msg : ''; }).filter(Boolean).join('; ');
+    return '';
+  }
+  function isCalifornia(zip, loc){
+    var st = loc && loc.state ? String(loc.state).toUpperCase() : '';
+    if (st) return st === 'CA' || st === 'CALIFORNIA';
+    var z = parseInt(zip.slice(0, 3), 10);
+    return z >= 900 && z <= 961;
+  }
+  function reveal(){
+    // On phones the status sits below the form and notes, off-screen.
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    var r = status.getBoundingClientRect();
+    if ((r.top < 0 || r.top > window.innerHeight - 120) && status.scrollIntoView) status.scrollIntoView({block: 'start', behavior: 'smooth'});
+  }
+  function showFallback(cls, html, interest, zip, agesText, income){
+    fallbackMsg.className = cls;
+    fallbackMsg.innerHTML = html;
+    fallbackForm.interest.value = interest;
+    fallbackForm.zip.value = zip;
+    fallbackForm.ages.value = agesText;
+    fallbackForm.income.value = isNaN(income) ? '' : String(income);
+    fallback.style.display = 'block';
+  }
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     fallback.style.display = 'none';
     results.innerHTML = '';
     var zip = form.zip.value.trim();
-    var ages = form.ages.value.split(',').map(function(x){ return parseInt(x.trim(), 10); }).filter(function(x){ return !isNaN(x); });
-    var income = parseFloat(form.income.value);
-    if (!/^\\d{5}$/.test(zip) || ages.length === 0 || isNaN(income)){
-      status.innerHTML = '<div class="quote-error">Please enter a 5-digit ZIP code, at least one age, and an income estimate.</div>';
+    var ages = form.ages.value.split(/[\\s,;]+/).filter(function(x){ return x !== ''; })
+      .map(function(x){ return /^\\d{1,3}$/.test(x) ? parseInt(x, 10) : NaN; });
+    var incomeText = form.income.value.replace(/[$,\\s]/g, '');
+    var income = /^\\d+(\\.\\d+)?$/.test(incomeText) ? parseFloat(incomeText) : NaN;
+    var problems = [];
+    if (!/^\\d{5}$/.test(zip)) problems.push('a 5-digit ZIP code');
+    if (ages.length === 0 || ages.length > 20 || ages.some(function(a){ return isNaN(a) || a > 120; })) problems.push('each age as a whole number, separated by commas (up to 20 people)');
+    if (isNaN(income)) problems.push('an annual income estimate in dollars, such as 40000');
+    if (problems.length){
+      status.innerHTML = '<div class="quote-error">Please enter ' + esc(problems.join('; ')) + '.</div>';
+      reveal();
       return;
     }
-    status.textContent = 'Getting quotes…';
+    var mine = ++seq;
+    var agesText = ages.join(', ');
     var tobacco = ages.map(function(_, i){ return i === 0 ? form.tobacco.checked : false; });
+    var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 75000) : null;
+    button.disabled = true;
+    status.textContent = 'Getting quotes…';
+    reveal();
     try {
       var resp = await fetch('https://api.planforcoverage.com/v1/quote', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({zip_code: zip, household_size: ages.length, annual_household_income: income, ages: ages, tobacco: tobacco, plan_year: 2027, effective_date: '2027-01-01'})
+        body: JSON.stringify({zip_code: zip, household_size: ages.length, annual_household_income: income, ages: ages, tobacco: tobacco, plan_year: 2027, effective_date: '2027-01-01'}),
+        signal: ctrl ? ctrl.signal : undefined
       });
-      var data = await resp.json();
-      if (!resp.ok || !data.data || !data.data.plans){
-        throw new Error((data && data.detail) ? data.detail : 'Quote service returned an error.');
+      var data = null;
+      try { data = await resp.json(); } catch (_) { data = null; }
+      if (mine !== seq) return;
+      if (!resp.ok || !data || !data.data || !Array.isArray(data.data.plans)){
+        throw new Error(detailText(data && data.detail) || ('The quote service returned an error (HTTP ' + resp.status + ').'));
       }
-      var plans = data.data.plans;
+      var plans = data.data.plans.slice();
+      var loc = data.location || null;
       if (plans.length === 0){
-        status.textContent = 'No plans returned for that ZIP. Try a nearby ZIP, or send a quote request below.';
-        fallback.style.display = 'block';
+        if (isCalifornia(zip, loc)){
+          status.textContent = 'No marketplace plans came back for this household and income.';
+          showFallback('quote-info', '<p><strong>No plans came back, and in California that can mean Medi-Cal.</strong> Covered California generally directs households below a certain income level to Medi-Cal instead of a subsidized marketplace plan, and this tool can\\'t check Medi-Cal eligibility. Whether that applies to you depends on your full household and income details, so send the form below and I\\'ll check Medi-Cal and Covered California options for you, or call <a href="tel:+14243629253">(424) 362-9253</a>.</p>',
+            'Live quote: no plans returned (California) — please check Medi-Cal / Covered California', zip, agesText, income);
+        } else {
+          status.textContent = 'No plans came back for this ZIP, household and income.';
+          showFallback('quote-info', '<p><strong>No plans came back for these details.</strong> Depending on income, some households are directed to their state\\'s Medicaid program instead of a marketplace plan, and occasionally the quoting data has a gap for a ZIP code. Send the form below and I\\'ll check your options by hand, or call <a href="tel:+14243629253">(424) 362-9253</a>.</p>',
+            'Live quote: no plans returned', zip, agesText, income);
+        }
         return;
       }
-      status.textContent = plans.length + ' plans, sorted cheapest net premium first. Estimates for plan year 2027.';
+      plans.sort(function(a, b){ var x = netOf(a), y = netOf(b); return x === y ? 0 : (x < y ? -1 : 1); });
+      var note = plans.length >= PAGE_SIZE
+        ? 'Showing ' + plans.length + ' lower-priced plans (the quote service returns up to ' + PAGE_SIZE + '), sorted by net monthly premium. Estimates for plan year 2027.'
+        : plans.length + ' plans, sorted cheapest net premium first. Estimates for plan year 2027.';
+      if (loc && loc.multiple_counties) note += ' This ZIP spans more than one county and prices can differ by county, so confirm with me before you enroll.';
+      status.textContent = note;
       results.innerHTML = plans.map(function(p){
         var pr = p.pricing || {};
         var det = p.details || {};
         var docs = p.documents || {};
         var links = [];
-        if (docs.sbc_url) links.push('<a href="' + esc(docs.sbc_url) + '" target="_blank" rel="noopener">Summary of benefits</a>');
-        if (docs.formulary_url) links.push('<a href="' + esc(docs.formulary_url) + '" target="_blank" rel="noopener">Formulary</a>');
+        var sbc = safeUrl(docs.sbc_url), formulary = safeUrl(docs.formulary_url);
+        if (sbc) links.push('<a href="' + esc(sbc) + '" target="_blank" rel="noopener">Summary of benefits</a>');
+        if (formulary) links.push('<a href="' + esc(formulary) + '" target="_blank" rel="noopener">Formulary</a>');
         return '<article class="plan-card"><h3>' + esc(p.display_name || p.name || 'Plan') + '</h3>'
           + '<p class="issuer">' + esc((p.issuer && p.issuer.name) || '') + '</p>'
           + '<p class="net">' + money(pr.net_premium) + ' <small>/ month net</small></p>'
@@ -434,8 +506,16 @@ quote = """
           + '</article>';
       }).join('');
     } catch (err) {
-      status.innerHTML = '<div class="quote-error">Live quotes could not be loaded: ' + esc(err.message) + '</div>';
-      fallback.style.display = 'block';
+      if (mine !== seq) return;
+      var msg = err && err.name === 'AbortError' ? 'The quote service took too long to respond.'
+        : (err instanceof TypeError ? 'Could not reach the quote service. Check your connection and try again.'
+        : (err && err.message) || 'Something went wrong.');
+      status.innerHTML = '<div class="quote-error">Live quotes could not be loaded: ' + esc(msg) + '</div>';
+      showFallback('quote-error', '<p><strong>Live quotes are unavailable right now.</strong> Send the details below instead and I\\'ll reply within one business day with options.</p>',
+        'Live quote request (API fallback)', zip, agesText, income);
+    } finally {
+      if (timer) clearTimeout(timer);
+      if (mine === seq) button.disabled = false;
     }
   });
 })();
@@ -459,6 +539,34 @@ privacy = f"""
 <p>You may ask me to correct or delete the information I hold about you at any time by emailing <a href="mailto:{EMAIL}">{EMAIL}</a>, subject to record‑keeping requirements imposed by insurance regulators.</p>
 </div></section>"""
 page("privacy.html","Privacy policy","How Plan For Coverage collects, uses and protects your information.",privacy)
+
+# ---------- 404 ----------
+# GitHub Pages serves this for any missing path, at that path's depth, so it
+# links from the site root (p="/") instead of the usual ../ prefix.
+notfound = """
+<section class="page-head"><div class="wrap"><h1>Page not found</h1>
+<p class="lede">That address doesn't match a page on this site. If you were looking for instant plan estimates, the live quote tool is at <a href="/quote.html">planforcoverage.com/quote.html</a>.</p>
+<div class="actions">
+  <a class="btn btn-amber" href="/quote.html">Live quote</a>
+  <a class="btn btn-ghost" href="/contact.html">Request a quote</a>
+  <a class="btn btn-ghost" href="/">Home</a>
+</div></div></section>
+<script>
+(function(){
+  // Send common shortened, mis-cased or punctuation-trailed addresses to the real page.
+  var ALIASES = {'/quote': '/quote.html', '/quotes': '/quote.html', '/quote.htm': '/quote.html', '/quote.html': '/quote.html',
+    '/live-quote': '/quote.html', '/livequote': '/quote.html', '/get-a-quote': '/quote.html',
+    '/contact': '/contact.html', '/contact.htm': '/contact.html', '/contact.html': '/contact.html',
+    '/about': '/about.html', '/about.html': '/about.html', '/privacy': '/privacy.html', '/privacy.html': '/privacy.html',
+    '/index': '/', '/index.htm': '/', '/home': '/'};
+  var path = location.pathname;
+  try { path = decodeURIComponent(path); } catch (_) {}
+  path = path.toLowerCase().replace(/[\\s.,;:!?)\\]'"]+$/, '').replace(/\\/+$/, '');
+  var target = ALIASES[path];
+  if (target && target !== location.pathname) location.replace(target + location.search + location.hash);
+})();
+</script>"""
+page("404.html", "Page not found", "This page could not be found.", notfound, p="/", noindex=True)
 
 
 # ---------- CALIFORNIA CITY PAGES ----------

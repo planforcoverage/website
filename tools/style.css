@@ -158,8 +158,11 @@ a:hover{color:var(--amber-dark)}
 .plan-card dl{margin:1em 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 16px;font-size:.95rem}
 .plan-card dt{color:var(--slate)}
 .plan-card dd{margin:0}
-.quote-status{margin-top:16px;color:var(--slate)}
+.quote-status{margin-top:16px;color:var(--slate);scroll-margin-top:96px}
 .quote-error{color:#8a1f1f;background:#fdf0f0;border:1px solid #e8b4b4;border-radius:var(--radius);padding:14px 18px}
+.quote-info{color:var(--ink);background:var(--mist);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:var(--radius);padding:14px 18px}
+.quote-error p:last-child,.quote-info p:last-child{margin-bottom:0}
+.quote-form button:disabled{opacity:.6;cursor:progress}
 #quote-fallback{display:none;margin-top:28px}
 
 /* city list */

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found · Plan For Coverage</title>
+<meta name="description" content="This page could not be found.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/style.css">
+<meta name="robots" content="noindex">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"InsuranceAgency","name":"Plan For Coverage","founder":{"@type":"Person","name":"Eric Becker"},"url":"https://planforcoverage.com/","telephone":"+14243629253","email":"ebecker@planforcoverage.com","areaServed":[{"@type":"State","name":"California"},{"@type":"State","name":"Arizona"},{"@type":"State","name":"Florida"},{"@type":"State","name":"Georgia"},{"@type":"State","name":"Michigan"},{"@type":"State","name":"Ohio"},{"@type":"State","name":"Oregon"},{"@type":"State","name":"Tennessee"},{"@type":"State","name":"Texas"},{"@type":"State","name":"Utah"}],"knowsAbout":["Health insurance","Covered California","Major medical","Accident insurance","Hospital indemnity","Critical illness insurance","Dental insurance","Vision insurance"]}</script>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="brand" href="/index.html"><span class="brand-mark" aria-hidden="true"></span>Plan For Coverage</a>
+  <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav id="nav" class="nav">
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li class="has-sub"><a href="/services/index.html">Services</a>
+        <ul class="sub"><li><a href="/services/major-medical.html">Major Medical</a></li><li><a href="/services/accident.html">Accident Insurance</a></li><li><a href="/services/hospital-indemnity.html">Hospital Indemnity</a></li><li><a href="/services/critical-illness.html">Critical Illness</a></li><li><a href="/services/dental.html">Dental</a></li><li><a href="/services/vision.html">Vision</a></li><li><a href="/services/medicare.html">Medicare referrals</a></li></ul>
+      </li>
+      <li><a href="/california/index.html">California</a>
+      </li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+    </ul>
+    <a class="btn btn-amber nav-cta" href="/contact.html">Request a quote</a>
+  </nav>
+</header>
+<main>
+
+<section class="page-head"><div class="wrap"><h1>Page not found</h1>
+<p class="lede">That address doesn't match a page on this site. If you were looking for instant plan estimates, the live quote tool is at <a href="/quote.html">planforcoverage.com/quote.html</a>.</p>
+<div class="actions">
+  <a class="btn btn-amber" href="/quote.html">Live quote</a>
+  <a class="btn btn-ghost" href="/contact.html">Request a quote</a>
+  <a class="btn btn-ghost" href="/">Home</a>
+</div></div></section>
+<script>
+(function(){
+  // Send common shortened, mis-cased or punctuation-trailed addresses to the real page.
+  var ALIASES = {'/quote': '/quote.html', '/quotes': '/quote.html', '/quote.htm': '/quote.html', '/quote.html': '/quote.html',
+    '/live-quote': '/quote.html', '/livequote': '/quote.html', '/get-a-quote': '/quote.html',
+    '/contact': '/contact.html', '/contact.htm': '/contact.html', '/contact.html': '/contact.html',
+    '/about': '/about.html', '/about.html': '/about.html', '/privacy': '/privacy.html', '/privacy.html': '/privacy.html',
+    '/index': '/', '/index.htm': '/', '/home': '/'};
+  var path = location.pathname;
+  try { path = decodeURIComponent(path); } catch (_) {}
+  path = path.toLowerCase().replace(/[\s.,;:!?)\]'"]+$/, '').replace(/\/+$/, '');
+  var target = ALIASES[path];
+  if (target && target !== location.pathname) location.replace(target + location.search + location.hash);
+})();
+</script>
+</main>
+
+<footer class="site-footer">
+  <div class="foot-grid">
+    <div>
+      <p class="foot-brand">Plan For Coverage</p>
+      <p>Independent health and life insurance broker based in California, licensed in ten states.</p>
+      <p>Eric Becker · CA Insurance License #0I16359 · NPN 16853098</p>
+    </div>
+    <div>
+      <h3>Eric Becker, broker</h3>
+      <p>Cell: <a href="tel:+14243629253">(424) 362-9253</a><br><a href="mailto:ebecker@planforcoverage.com">ebecker@planforcoverage.com</a></p>
+      <h3>Hours</h3>
+      <p>Monday – Friday, 9:00 am – 5:00 pm Pacific<br>Evenings and weekends by appointment</p>
+    </div>
+    <div>
+      <h3>Pages</h3>
+      <p><a href="/services/index.html">Services</a><br><a href="/about.html">About</a><br><a href="/contact.html">Request a quote</a><br><a href="/privacy.html">Privacy policy</a></p>
+    </div>
+  </div>
+  <p class="foot-legal">© 2026 Plan For Coverage. Licensed in California, Arizona, Florida, Georgia, Michigan, Ohio, Oregon, Tennessee, Texas, Utah. Not affiliated with or endorsed by Medicare, CMS or any government agency. Plan availability and benefits vary by state and carrier; this site is general information, not an offer of coverage.</p>
+</footer>
+<script src="/assets/site.js"></script>
+</body>
+</html>
