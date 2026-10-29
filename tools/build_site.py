@@ -223,21 +223,24 @@ svc_page("accident","Accident Insurance",
  ["Families with active kids","People on high‑deductible health plans","Anyone who works with their hands or plays hard on weekends"],
  ["Emergency room and urgent care visits","Fractures, dislocations and lacerations","Ambulance transport","Follow‑up care and physical therapy","Accidental death and dismemberment"],
  """<p>Accident plans are usually inexpensive and have no network: you see whoever you want and file a claim afterward.</p>
- <p>They don't replace major medical. They sit beside it to cover the out‑of‑pocket costs that pile up fast after an injury.</p>""")
+ <p>They don't replace major medical. They sit beside it to cover the out‑of‑pocket costs that pile up fast after an injury.</p>
+ <p><strong>Ready when you are:</strong> <a href="https://customer.enroll.natgenhealth.com/quick-quote/?agent=CfDJ8KcuJeU1UfVFhwatU8NLwQkXbTYJuUHIZOKOT357JGK8FVIFPUTyxQQFEayUC3SNFz5qQ6-xEMdw_GU97aoEZJUGYg&product=all-products" target="_blank" rel="noopener">my Allstate Health Solutions quote link</a> covers accident, hospital indemnity, critical illness and more.</p>""")
 
 svc_page("hospital-indemnity","Hospital Indemnity",
  "A set dollar amount paid for each day you're admitted to the hospital, plus benefits for admission, ICU and sometimes outpatient surgery. It's one of the simplest ways to protect against a high deductible.",
  ["People on Bronze or high‑deductible plans","Households that couldn't absorb a surprise $5,000–$9,000 bill","Expecting parents (many plans cover childbirth stays after a waiting period)"],
  ["Lump sum on hospital admission","Daily benefit for each day confined","Higher daily benefit for intensive care","Optional riders for outpatient surgery, ER and diagnostic tests"],
  """<p>Benefits are paid directly to you regardless of what the hospital charges or what your health plan pays.</p>
- <p>Most plans have a waiting period for pre‑existing conditions and for maternity, so it's best to buy before you need it.</p>""")
+ <p>Most plans have a waiting period for pre‑existing conditions and for maternity, so it's best to buy before you need it.</p>
+ <p><strong>Ready when you are:</strong> <a href="https://customer.enroll.natgenhealth.com/quick-quote/?agent=CfDJ8KcuJeU1UfVFhwatU8NLwQkXbTYJuUHIZOKOT357JGK8FVIFPUTyxQQFEayUC3SNFz5qQ6-xEMdw_GU97aoEZJUGYg&product=all-products" target="_blank" rel="noopener">my Allstate Health Solutions quote link</a> covers accident, hospital indemnity, critical illness and more.</p>""")
 
 svc_page("critical-illness","Critical Illness",
  "A lump‑sum payment when you're diagnosed with a covered condition — commonly cancer, heart attack, stroke, kidney failure or major organ transplant. Use it for treatment costs, travel, time off work or keeping the mortgage paid.",
  ["Anyone with a family history of cancer or heart disease","Sole earners and self‑employed people whose income stops when they can't work","People who want a defined safety net beyond their health plan"],
  ["Cancer (invasive and, often, a partial benefit for early‑stage)","Heart attack and stroke","Kidney failure and organ transplant","Optional riders for additional conditions and wellness screenings"],
  """<p>Benefit amounts typically range from $10,000 to $50,000 or more; premiums depend on age, tobacco use and the amount chosen.</p>
- <p>Many plans include a small annual wellness benefit that pays you for routine screenings, which can offset much of the premium.</p>""")
+ <p>Many plans include a small annual wellness benefit that pays you for routine screenings, which can offset much of the premium.</p>
+ <p><strong>Ready when you are:</strong> <a href="https://customer.enroll.natgenhealth.com/quick-quote/?agent=CfDJ8KcuJeU1UfVFhwatU8NLwQkXbTYJuUHIZOKOT357JGK8FVIFPUTyxQQFEayUC3SNFz5qQ6-xEMdw_GU97aoEZJUGYg&product=all-products" target="_blank" rel="noopener">my Allstate Health Solutions quote link</a> covers accident, hospital indemnity, critical illness and more.</p>""")
 
 svc_page("dental","Dental",
  "Standalone dental plans for adults and families. Most major medical plans don't include adult dental, so this is usually a separate policy with its own network and benefit schedule.",
