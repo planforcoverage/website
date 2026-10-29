@@ -256,7 +256,9 @@ svc_page("vision","Vision",
  ["Anyone who wears glasses or contacts","Families with school‑age kids","People whose health plan only covers pediatric vision"],
  ["Annual eye exam","Frames and lenses allowance","Contact lens allowance","Discounts on lens upgrades and laser correction"],
  """<p>Vision plans are inexpensive, often under $15 a month, and generally pay for themselves with one pair of glasses.</p>
- <p>Check that your optometrist is in network before enrolling; I can look it up for you.</p>""")
+ <p>Check that your optometrist is in network before enrolling; I can look it up for you.</p>
+ <p><strong>Ready when you are:</strong> <a href="https://enrollment.ncd.com/638041" target="_blank" rel="noopener">my National Care Dental enrollment page</a> also offers vision plans — shows current plans and rates, and enrolls you on the spot.</p>
+ <p>Prefer to bundle? <a href="https://customer.enroll.natgenhealth.com/quick-quote/?agent=CfDJ8KcuJeU1UfVFhwatU8NLwQkXbTYJuUHIZOKOT357JGK8FVIFPUTyxQQFEayUC3SNFz5qQ6-xEMdw_GU97aoEZJUGYg&product=all-products" target="_blank" rel="noopener">My Allstate Health Solutions quote link</a> includes vision as a supplement to dental.</p>""")
 
 medicare = f"""
 <section class="page-head"><div class="wrap">
