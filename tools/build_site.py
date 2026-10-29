@@ -422,8 +422,12 @@ quote = """
   function issuerOf(p){ return (p.issuer && p.issuer.name) || ''; }
   function metalOf(p){ return (p.details && p.details.metal_level) || ''; }
   function metalLabel(m){
-    var map = {bronze:'Bronze', bronze_hdhp:'Bronze HDHP', silver:'Silver', gold:'Gold', platinum:'Platinum', catastrophic:'Catastrophic', expanded_bronze:'Expanded Bronze'};
-    return map[m] || m;
+    var map = {bronze:'Bronze', bronze_hdhp:'Bronze HDHP', silver:'Silver', silver_csr:'Silver CSR', gold:'Gold', platinum:'Platinum', catastrophic:'Catastrophic', expanded_bronze:'Expanded Bronze'};
+    if (map[m]) return map[m];
+    return String(m).split('_').map(function(w){
+      var lw = w.toLowerCase();
+      return (lw === 'csr' || lw === 'hdhp') ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1);
+    }).join(' ');
   }
   function typeLabel(t){
     var map = {hmo:'HMO', ppo:'PPO', epo:'EPO', pos:'POS'};
