@@ -324,7 +324,7 @@ contact = f"""
     <label>What are you looking for? <select name="interest">{svc_opts}</select></label>
     <label>How many people need coverage? <input name="household" placeholder="e.g. 2 adults, 1 child"></label>
     <label>Anything else I should know? <textarea name="notes" rows="5" placeholder="Doctors you want to keep, prescriptions, budget, when you need coverage to start"></textarea></label>
-    <label class="check"><input type="checkbox" name="consent" required> I agree to be contacted by phone, text or email about my request. Message and data rates may apply; reply STOP to opt out. See the <a href="privacy.html">privacy policy</a>.</label>
+    <label class="check"><input type="checkbox" name="consent" required> By providing a telephone number and submitting this form, I consent to be contacted by SMS text message from Plan For Coverage about my request. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out, HELP for help, or call <a href="tel:+14243629253">(424) 362-9253</a>. See the <a href="privacy.html">privacy policy</a>.</label>
     <button class="btn btn-amber" type="submit">Send request</button>
     <p class="form-note">Your information is used only to prepare your quote. It is never sold or shared with lead buyers.</p>
   </form>
@@ -384,8 +384,10 @@ quote = """
       <label>ZIP code <input name="postal-code" inputmode="numeric" pattern="\\d{5}" maxlength="5" autocomplete="postal-code" spellcheck="false"></label>
       <label>Ages <input name="ages" placeholder="e.g. 40 or 40, 38"></label>
       <label>Annual household income estimate <input name="income" inputmode="numeric"></label>
+      <label>Phone <input type="tel" name="phone" autocomplete="tel"></label>
       <label>Anything else? <textarea name="notes" rows="4" placeholder="Doctors, prescriptions, budget, when you need coverage"></textarea></label>
       <input type="hidden" name="interest" value="Live quote request (API fallback)">
+      <label class="check"><input type="checkbox" name="consent" required> By providing a telephone number and submitting this form, I consent to be contacted by SMS text message from Plan For Coverage about my request. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out, HELP for help, or call (424) 362-9253.</label>
       <button class="btn btn-amber" type="submit">Send quote request</button>
     </form>
   </div>
