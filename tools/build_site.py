@@ -329,7 +329,17 @@ contact = f"""
     <h2>Already a client?</h2>
     <p>Call or email any time about claims, ID cards, network changes or 1095‑A forms.</p>
   </div>
-</div></section>"""
+</div></section>
+<script>
+(function(){{
+  try {{
+    var m = new URLSearchParams(window.location.search).get('enroll');
+    if (!m) return;
+    var notes = document.querySelector('form[action*="formspree"] textarea[name="notes"]');
+    if (notes && !notes.value) notes.value = m;
+  }} catch (_) {{}}
+}})();
+</script>"""
 page("contact.html","Request a quote","Request a health insurance quote from an independent broker licensed in California and nine other states.",contact)
 
 # ---------- LIVE QUOTE ----------
@@ -387,6 +397,7 @@ quote = """
   var fMetal = document.getElementById('filter-metal');
   var allPlans = [];
   var baseNote = '';
+  var quoteCtx = {zip: '', agesText: '', income: ''};
   var PAGE_SIZE = 100; // page.size the quote API requests from HealthSherpa ONE
   var seq = 0;
   function money(v){
@@ -419,7 +430,7 @@ quote = """
     var k = String(t || '').toLowerCase();
     return map[k] || t;
   }
-  function cardHtml(p){
+  function cardHtml(p, href){
     var pr = p.pricing || {};
     var det = p.details || {};
     var docs = p.documents || {};
@@ -436,9 +447,18 @@ quote = """
       + '<dt>Plan type</dt><dd>' + esc(det.plan_type ? typeLabel(det.plan_type) : '—') + '</dd>'
       + '<dt>Deductible (individual)</dt><dd>' + money(det.deductible_individual) + '</dd>'
       + '<dt>Out-of-pocket max (individual)</dt><dd>' + money(det.moop_individual) + '</dd></dl>'
-      + '<p class="enroll"><a href="contact.html">Enroll with us</a></p>'
+      + '<p class="enroll"><a href="' + esc(href) + '">Enroll with us</a></p>'
       + (links.length ? '<p>' + links.join(' · ') + '</p>' : '')
       + '</article>';
+  }
+  function enrollHref(p){
+    var pr = p.pricing || {};
+    var msg = "I'd like to enroll in " + (p.display_name || p.name || 'this plan')
+      + " (" + issuerOf(p) + ") at " + money(pr.net_premium) + "/month net."
+      + " Ages: " + quoteCtx.agesText
+      + "; income: $" + Number(quoteCtx.income).toLocaleString('en-US')
+      + "; ZIP: " + quoteCtx.zip + ".";
+    return 'contact.html?enroll=' + encodeURIComponent(msg);
   }
   function populateFilters(plans){
     var carriers = [], metals = [];
@@ -464,7 +484,7 @@ quote = """
     status.textContent = (c || m)
       ? 'Showing ' + shown.length + ' of ' + allPlans.length + ' plans (filtered). Estimates for plan year 2027.'
       : baseNote;
-    results.innerHTML = shown.map(cardHtml).join('');
+    results.innerHTML = shown.map(function(p){ return cardHtml(p, enrollHref(p)); }).join('');
   }
   fCarrier.addEventListener('change', applyFilters);
   fMetal.addEventListener('change', applyFilters);
@@ -551,6 +571,7 @@ quote = """
       }
       plans.sort(function(a, b){ var x = netOf(a), y = netOf(b); return x === y ? 0 : (x < y ? -1 : 1); });
       allPlans = plans;
+      quoteCtx.zip = zip; quoteCtx.agesText = agesText; quoteCtx.income = income;
       baseNote = plans.length >= PAGE_SIZE
         ? 'Showing ' + plans.length + ' lower-priced plans (the quote service returns up to ' + PAGE_SIZE + '), sorted by net monthly premium. Estimates for plan year 2027.'
         : plans.length + ' plans, sorted cheapest net premium first. Estimates for plan year 2027.';

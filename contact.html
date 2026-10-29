@@ -56,6 +56,16 @@
     <p>Call or email any time about claims, ID cards, network changes or 1095‑A forms.</p>
   </div>
 </div></section>
+<script>
+(function(){
+  try {
+    var m = new URLSearchParams(window.location.search).get('enroll');
+    if (!m) return;
+    var notes = document.querySelector('form[action*="formspree"] textarea[name="notes"]');
+    if (notes && !notes.value) notes.value = m;
+  } catch (_) {}
+})();
+</script>
 </main>
 
 <footer class="site-footer">
