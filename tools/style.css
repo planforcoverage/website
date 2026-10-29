@@ -164,6 +164,9 @@ a:hover{color:var(--amber-dark)}
 .quote-error p:last-child,.quote-info p:last-child{margin-bottom:0}
 .quote-form button:disabled{opacity:.6;cursor:progress}
 #quote-fallback{display:none;margin-top:28px}
+.quote-filters{display:flex;gap:16px;flex-wrap:wrap;margin:14px 0 4px}
+.quote-filters label{display:grid;gap:6px;font-weight:500;font-size:.95rem;color:var(--slate)}
+.quote-filters select{font:inherit;padding:.6rem .8rem;border:1px solid var(--line);border-radius:var(--radius);background:#fff;color:var(--ink);max-width:280px}
 
 /* city list */
 .city-list{list-style:none;padding:0;margin:0;columns:4;column-gap:32px}

@@ -354,6 +354,10 @@ quote = """
 </div></section>
 <section class="detail"><div class="wrap">
   <div id="quote-status" class="quote-status" role="status"></div>
+  <div id="quote-filters" class="quote-filters" style="display:none">
+    <label>Carrier <select id="filter-carrier"><option value="">All carriers</option></select></label>
+    <label>Metal level <select id="filter-metal"><option value="">All metal levels</option></select></label>
+  </div>
   <div id="quote-results" class="plan-grid"></div>
   <div id="quote-fallback">
     <div id="quote-fallback-msg" class="quote-error"><p><strong>Live quotes are unavailable right now.</strong> Send the details below instead and I'll reply within one business day with options.</p></div>
@@ -378,6 +382,11 @@ quote = """
   var fallback = document.getElementById('quote-fallback');
   var fallbackMsg = document.getElementById('quote-fallback-msg');
   var fallbackForm = document.getElementById('quote-fallback-form');
+  var filterBar = document.getElementById('quote-filters');
+  var fCarrier = document.getElementById('filter-carrier');
+  var fMetal = document.getElementById('filter-metal');
+  var allPlans = [];
+  var baseNote = '';
   var PAGE_SIZE = 20; // page.size the quote API requests from HealthSherpa ONE
   var seq = 0;
   function money(v){
@@ -399,6 +408,66 @@ quote = """
     var n = Number(v);
     return isNaN(n) ? Infinity : n;
   }
+  function issuerOf(p){ return (p.issuer && p.issuer.name) || ''; }
+  function metalOf(p){ return (p.details && p.details.metal_level) || ''; }
+  function metalLabel(m){
+    var map = {bronze:'Bronze', bronze_hdhp:'Bronze HDHP', silver:'Silver', gold:'Gold', platinum:'Platinum', catastrophic:'Catastrophic', expanded_bronze:'Expanded Bronze'};
+    return map[m] || m;
+  }
+  function typeLabel(t){
+    var map = {hmo:'HMO', ppo:'PPO', epo:'EPO', pos:'POS'};
+    var k = String(t || '').toLowerCase();
+    return map[k] || t;
+  }
+  function cardHtml(p){
+    var pr = p.pricing || {};
+    var det = p.details || {};
+    var docs = p.documents || {};
+    var links = [];
+    var sbc = safeUrl(docs.sbc_url), formulary = safeUrl(docs.formulary_url);
+    if (sbc) links.push('<a href="' + esc(sbc) + '" target="_blank" rel="noopener">Summary of benefits</a>');
+    if (formulary) links.push('<a href="' + esc(formulary) + '" target="_blank" rel="noopener">Formulary</a>');
+    return '<article class="plan-card"><h3>' + esc(p.display_name || p.name || 'Plan') + '</h3>'
+      + '<p class="issuer">' + esc(issuerOf(p)) + '</p>'
+      + '<p class="net">' + money(pr.net_premium) + ' <small>/ month net</small></p>'
+      + '<dl><dt>Full price</dt><dd>' + money(pr.gross_premium) + ' / month</dd>'
+      + '<dt>Subsidy / APTC</dt><dd>' + money(pr.subsidy_applied) + ' / month</dd>'
+      + '<dt>Metal level</dt><dd>' + esc(det.metal_level ? metalLabel(det.metal_level) : '—') + '</dd>'
+      + '<dt>Plan type</dt><dd>' + esc(det.plan_type ? typeLabel(det.plan_type) : '—') + '</dd>'
+      + '<dt>Deductible (individual)</dt><dd>' + money(det.deductible_individual) + '</dd>'
+      + '<dt>Out-of-pocket max (individual)</dt><dd>' + money(det.moop_individual) + '</dd>'
+      + '<dt>Direct enrollment here</dt><dd>' + (p.api_enrollable ? 'Yes' : 'No — via exchange / broker help') + '</dd></dl>'
+      + (links.length ? '<p>' + links.join(' · ') + '</p>' : '')
+      + '</article>';
+  }
+  function populateFilters(plans){
+    var carriers = [], metals = [];
+    plans.forEach(function(p){
+      var c = issuerOf(p); if (c && carriers.indexOf(c) === -1) carriers.push(c);
+      var m = metalOf(p); if (m && metals.indexOf(m) === -1) metals.push(m);
+    });
+    carriers.sort(); metals.sort();
+    fCarrier.innerHTML = '<option value="">All carriers</option>' + carriers.map(function(c){ return '<option value="' + esc(c) + '">' + esc(c) + '</option>'; }).join('');
+    fMetal.innerHTML = '<option value="">All metal levels</option>' + metals.map(function(m){ return '<option value="' + esc(m) + '">' + esc(metalLabel(m)) + '</option>'; }).join('');
+    filterBar.style.display = 'flex';
+  }
+  function applyFilters(){
+    var c = fCarrier.value, m = fMetal.value;
+    var shown = allPlans.filter(function(p){
+      return (!c || issuerOf(p) === c) && (!m || metalOf(p) === m);
+    });
+    if (shown.length === 0){
+      status.textContent = 'No plans match these filters. Loosen a filter to see more.';
+      results.innerHTML = '';
+      return;
+    }
+    status.textContent = (c || m)
+      ? 'Showing ' + shown.length + ' of ' + allPlans.length + ' plans (filtered). Estimates for plan year 2027.'
+      : baseNote;
+    results.innerHTML = shown.map(cardHtml).join('');
+  }
+  fCarrier.addEventListener('change', applyFilters);
+  fMetal.addEventListener('change', applyFilters);
   function detailText(d){
     if (typeof d === 'string') return d;
     if (Array.isArray(d)) return d.map(function(x){ return x && x.msg ? x.msg : ''; }).filter(Boolean).join('; ');
@@ -428,6 +497,8 @@ quote = """
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     fallback.style.display = 'none';
+    filterBar.style.display = 'none';
+    allPlans = [];
     results.innerHTML = '';
     var zip = form.zip.value.trim();
     var ages = form.ages.value.split(/[\\s,;]+/).filter(function(x){ return x !== ''; })
@@ -479,32 +550,13 @@ quote = """
         return;
       }
       plans.sort(function(a, b){ var x = netOf(a), y = netOf(b); return x === y ? 0 : (x < y ? -1 : 1); });
-      var note = plans.length >= PAGE_SIZE
+      allPlans = plans;
+      baseNote = plans.length >= PAGE_SIZE
         ? 'Showing ' + plans.length + ' lower-priced plans (the quote service returns up to ' + PAGE_SIZE + '), sorted by net monthly premium. Estimates for plan year 2027.'
         : plans.length + ' plans, sorted cheapest net premium first. Estimates for plan year 2027.';
-      if (loc && loc.multiple_counties) note += ' This ZIP spans more than one county and prices can differ by county, so confirm with me before you enroll.';
-      status.textContent = note;
-      results.innerHTML = plans.map(function(p){
-        var pr = p.pricing || {};
-        var det = p.details || {};
-        var docs = p.documents || {};
-        var links = [];
-        var sbc = safeUrl(docs.sbc_url), formulary = safeUrl(docs.formulary_url);
-        if (sbc) links.push('<a href="' + esc(sbc) + '" target="_blank" rel="noopener">Summary of benefits</a>');
-        if (formulary) links.push('<a href="' + esc(formulary) + '" target="_blank" rel="noopener">Formulary</a>');
-        return '<article class="plan-card"><h3>' + esc(p.display_name || p.name || 'Plan') + '</h3>'
-          + '<p class="issuer">' + esc((p.issuer && p.issuer.name) || '') + '</p>'
-          + '<p class="net">' + money(pr.net_premium) + ' <small>/ month net</small></p>'
-          + '<dl><dt>Full price</dt><dd>' + money(pr.gross_premium) + ' / month</dd>'
-          + '<dt>Subsidy / APTC</dt><dd>' + money(pr.subsidy_applied) + ' / month</dd>'
-          + '<dt>Metal level</dt><dd>' + esc(det.metal_level || '—') + '</dd>'
-          + '<dt>Plan type</dt><dd>' + esc(det.plan_type || '—') + '</dd>'
-          + '<dt>Deductible (individual)</dt><dd>' + money(det.deductible_individual) + '</dd>'
-          + '<dt>Out-of-pocket max (individual)</dt><dd>' + money(det.moop_individual) + '</dd>'
-          + '<dt>Direct enrollment here</dt><dd>' + (p.api_enrollable ? 'Yes' : 'No — via exchange / broker help') + '</dd></dl>'
-          + (links.length ? '<p>' + links.join(' · ') + '</p>' : '')
-          + '</article>';
-      }).join('');
+      if (loc && loc.multiple_counties) baseNote += ' This ZIP spans more than one county and prices can differ by county, so confirm with me before you enroll.';
+      populateFilters(plans);
+      applyFilters();
     } catch (err) {
       if (mine !== seq) return;
       var msg = err && err.name === 'AbortError' ? 'The quote service took too long to respond.'
