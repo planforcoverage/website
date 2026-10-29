@@ -245,7 +245,8 @@ svc_page("dental","Dental",
  ["Cleanings, exams and X‑rays, usually at no cost","Fillings and extractions","Crowns, bridges, root canals and dentures","Orthodontia on select plans"],
  """<p>Watch for waiting periods on major work and annual maximums (commonly $1,000–$2,000). I'll point out which plans waive waiting periods if you've had prior coverage.</p>
  <p>Dental and vision can often be bundled for a small discount.</p>
- <p><strong>Ready when you are:</strong> <a href="https://enrollment.ncd.com/638041" target="_blank" rel="noopener">my National Care Dental enrollment page</a> shows current plans and rates, and enrolls you on the spot.</p>""")
+ <p><strong>Ready when you are:</strong> <a href="https://enrollment.ncd.com/638041" target="_blank" rel="noopener">my National Care Dental enrollment page</a> shows current plans and rates, and enrolls you on the spot.</p>
+ <p>On a budget or between plans: <a href="https://lddy.no/1lpr3" target="_blank" rel="noopener">1Dental</a> is a dental discount program (not insurance) that cuts the cost of cleanings, fillings, crowns and more at participating dentists.</p>""")
 
 svc_page("vision","Vision",
  "Low‑cost plans that cover eye exams, glasses and contacts at a predictable price, with discounts on LASIK and extra pairs.",
