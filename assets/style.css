@@ -147,6 +147,21 @@ a:hover{color:var(--amber-dark)}
 .foot-legal{max-width:var(--max);margin:40px auto 0;font-size:.85rem;color:#8e9ba8;border-top:1px solid #334150;padding-top:20px}
 @media (max-width:760px){.foot-grid{grid-template-columns:1fr;gap:24px}}
 
+/* live quote */
+.plan-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:20px}
+@media (max-width:760px){.plan-grid{grid-template-columns:1fr}}
+.plan-card{border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:var(--radius);padding:20px;background:var(--paper)}
+.plan-card h3{margin-bottom:.2em}
+.plan-card .issuer{color:var(--slate);font-size:.95rem;margin:0 0 .8em}
+.plan-card .net{font-family:var(--display);font-size:1.6rem;color:var(--navy);margin:0}
+.plan-card .net small{font-size:.9rem;color:var(--slate);font-family:var(--body)}
+.plan-card dl{margin:1em 0 0;display:grid;grid-template-columns:auto 1fr;gap:2px 16px;font-size:.95rem}
+.plan-card dt{color:var(--slate)}
+.plan-card dd{margin:0}
+.quote-status{margin-top:16px;color:var(--slate)}
+.quote-error{color:#8a1f1f;background:#fdf0f0;border:1px solid #e8b4b4;border-radius:var(--radius);padding:14px 18px}
+#quote-fallback{display:none;margin-top:28px}
+
 /* city list */
 .city-list{list-style:none;padding:0;margin:0;columns:4;column-gap:32px}
 .city-list li{break-inside:avoid;padding:.3rem 0;border-bottom:1px solid var(--line)}

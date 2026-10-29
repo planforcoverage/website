@@ -120,6 +120,7 @@ home = f"""
     <div class="actions">
       <a class="btn btn-amber" href="tel:{PHONE_TEL}">Call {PHONE}</a>
       <a class="btn btn-ghost" href="contact.html">Request a quote</a>
+      <a class="btn btn-ghost" href="quote.html">Try a live quote</a>
     </div>
     <p class="hero-note">Working with a broker costs you nothing. Carriers pay me; your premium is the same either way.</p>
   </div>
@@ -304,7 +305,7 @@ state_opts = "".join(f'<option>{s}</option>' for s in STATES) + '<option>Other (
 svc_opts = '<option value="">Choose one</option>' + "".join(f'<option>{n}</option>' for _,n,_ in SERVICES) + '<option>Medicare referral</option><option>Not sure yet</option>'
 contact = f"""
 <section class="page-head"><div class="wrap"><h1>Request a quote</h1>
-<p class="lede">Send a few details and I'll reply within one business day with options. Prefer to talk? Call <a href="tel:{PHONE_TEL}">{PHONE}</a>.</p></div></section>
+<p class="lede">Send a few details and I'll reply within one business day with options. Prefer to talk? Call <a href="tel:{PHONE_TEL}">{PHONE}</a>. Want instant estimates first? <a href="quote.html">Try the live quote tool</a>.</p></div></section>
 <section class="detail"><div class="wrap two">
   <form class="quote-form" action="https://formspree.io/f/mdeegqng" method="POST">
     <label>Name <input name="name" required autocomplete="name"></label>
@@ -328,6 +329,118 @@ contact = f"""
   </div>
 </div></section>"""
 page("contact.html","Request a quote","Request a health insurance quote from an independent broker licensed in California and nine other states.",contact)
+
+# ---------- LIVE QUOTE ----------
+quote = """
+<section class="page-head"><div class="wrap"><h1>Live quote</h1>
+<p class="lede">Instant estimates for plan year 2027. Enter a ZIP code, ages, and an annual household income estimate, and see plans sorted cheapest first. This is an estimate, not an offer of coverage — the final premium and tax credit are determined when you apply.</p></div></section>
+<section class="detail"><div class="wrap two">
+  <form class="quote-form" id="live-quote-form">
+    <label>ZIP code <input name="zip" inputmode="numeric" pattern="\\d{5}" maxlength="5" required placeholder="e.g. 91724"></label>
+    <label>Ages, comma-separated <input name="ages" required placeholder="e.g. 40 or 40, 38"></label>
+    <label>Annual household income estimate ($) <input name="income" type="number" min="0" step="1000" required placeholder="e.g. 40000"></label>
+    <label class="check"><input type="checkbox" name="tobacco"> Primary applicant uses tobacco</label>
+    <button class="btn btn-amber" type="submit">Get live quotes</button>
+    <p class="form-note">Plan year 2027, coverage effective January 1, 2027. No name, date of birth, or Social Security number is collected by this tool. ZIP, ages, income estimate, and tobacco status are sent to the quoting service only to generate these estimates, and nothing is stored on this site.</p>
+  </form>
+  <div class="notes">
+    <h2>What happens next</h2>
+    <p>Use the estimates to narrow it down, then <a href="contact.html">send a quote request</a> or call <a href="tel:+14243629253">(424) 362-9253</a> and I'll help you enroll — through Covered California in California, Explore Health in Oregon, Georgia Access in Georgia, or HealthSherpa in the other states I serve.</p>
+    <h2>Good to know</h2>
+    <p>Plans marked as not directly enrollable here are quote/display only; enrollment for those goes through the state exchange or with my help. Subsidy amounts shown are estimates based on the income you entered.</p>
+  </div>
+</div></section>
+<section class="detail"><div class="wrap">
+  <div id="quote-status" class="quote-status" role="status"></div>
+  <div id="quote-results" class="plan-grid"></div>
+  <div id="quote-fallback">
+    <div class="quote-error"><p><strong>Live quotes are unavailable right now.</strong> Send the details below instead and I'll reply within one business day with options.</p></div>
+    <form class="quote-form" action="https://formspree.io/f/mdeegqng" method="POST" style="margin-top:20px">
+      <label>Name <input name="name" required autocomplete="name"></label>
+      <label>Email <input type="email" name="email" required autocomplete="email"></label>
+      <label>ZIP code <input name="zip" inputmode="numeric" pattern="\\d{5}" maxlength="5"></label>
+      <label>Ages <input name="ages" placeholder="e.g. 40 or 40, 38"></label>
+      <label>Annual household income estimate <input name="income" type="number" min="0" step="1000"></label>
+      <label>Anything else? <textarea name="notes" rows="4" placeholder="Doctors, prescriptions, budget, when you need coverage"></textarea></label>
+      <input type="hidden" name="interest" value="Live quote request (API fallback)">
+      <button class="btn btn-amber" type="submit">Send quote request</button>
+    </form>
+  </div>
+</div></section>
+<script>
+(function(){
+  var form = document.getElementById('live-quote-form');
+  var status = document.getElementById('quote-status');
+  var results = document.getElementById('quote-results');
+  var fallback = document.getElementById('quote-fallback');
+  function money(v){
+    if (v === null || v === undefined || v === '') return '—';
+    var n = Number(v);
+    return isNaN(n) ? String(v) : '$' + n.toFixed(2);
+  }
+  function esc(s){
+    return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    fallback.style.display = 'none';
+    results.innerHTML = '';
+    var zip = form.zip.value.trim();
+    var ages = form.ages.value.split(',').map(function(x){ return parseInt(x.trim(), 10); }).filter(function(x){ return !isNaN(x); });
+    var income = parseFloat(form.income.value);
+    if (!/^\\d{5}$/.test(zip) || ages.length === 0 || isNaN(income)){
+      status.innerHTML = '<div class="quote-error">Please enter a 5-digit ZIP code, at least one age, and an income estimate.</div>';
+      return;
+    }
+    status.textContent = 'Getting quotes…';
+    var tobacco = ages.map(function(_, i){ return i === 0 ? form.tobacco.checked : false; });
+    try {
+      var resp = await fetch('https://api.planforcoverage.com/v1/quote', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({zip_code: zip, household_size: ages.length, annual_household_income: income, ages: ages, tobacco: tobacco, plan_year: 2027, effective_date: '2027-01-01'})
+      });
+      var data = await resp.json();
+      if (!resp.ok || !data.data || !data.data.plans){
+        throw new Error((data && data.detail) ? data.detail : 'Quote service returned an error.');
+      }
+      var plans = data.data.plans;
+      if (plans.length === 0){
+        status.textContent = 'No plans returned for that ZIP. Try a nearby ZIP, or send a quote request below.';
+        fallback.style.display = 'block';
+        return;
+      }
+      status.textContent = plans.length + ' plans, sorted cheapest net premium first. Estimates for plan year 2027.';
+      results.innerHTML = plans.map(function(p){
+        var pr = p.pricing || {};
+        var det = p.details || {};
+        var docs = p.documents || {};
+        var links = [];
+        if (docs.sbc_url) links.push('<a href="' + esc(docs.sbc_url) + '" target="_blank" rel="noopener">Summary of benefits</a>');
+        if (docs.formulary_url) links.push('<a href="' + esc(docs.formulary_url) + '" target="_blank" rel="noopener">Formulary</a>');
+        return '<article class="plan-card"><h3>' + esc(p.display_name || p.name || 'Plan') + '</h3>'
+          + '<p class="issuer">' + esc((p.issuer && p.issuer.name) || '') + '</p>'
+          + '<p class="net">' + money(pr.net_premium) + ' <small>/ month net</small></p>'
+          + '<dl><dt>Full price</dt><dd>' + money(pr.gross_premium) + ' / month</dd>'
+          + '<dt>Subsidy / APTC</dt><dd>' + money(pr.subsidy_applied) + ' / month</dd>'
+          + '<dt>Metal level</dt><dd>' + esc(det.metal_level || '—') + '</dd>'
+          + '<dt>Plan type</dt><dd>' + esc(det.plan_type || '—') + '</dd>'
+          + '<dt>Deductible (individual)</dt><dd>' + money(det.deductible_individual) + '</dd>'
+          + '<dt>Out-of-pocket max (individual)</dt><dd>' + money(det.moop_individual) + '</dd>'
+          + '<dt>Direct enrollment here</dt><dd>' + (p.api_enrollable ? 'Yes' : 'No — via exchange / broker help') + '</dd></dl>'
+          + (links.length ? '<p>' + links.join(' · ') + '</p>' : '')
+          + '</article>';
+      }).join('');
+    } catch (err) {
+      status.innerHTML = '<div class="quote-error">Live quotes could not be loaded: ' + esc(err.message) + '</div>';
+      fallback.style.display = 'block';
+    }
+  });
+})();
+</script>"""
+page("quote.html","Live quote","Instant health insurance plan estimates for plan year 2027 from an independent broker licensed in ten states.",quote)
 
 # ---------- PRIVACY ----------
 privacy = f"""
@@ -395,7 +508,7 @@ for city, county in CITIES:
 
 # sitemap + robots
 BASE="https://planforcoverage.com"
-urls=["","services/index.html","about.html","contact.html","privacy.html","california/index.html"]+[f"services/{s}.html" for s,_,_ in SERVICES]+["services/medicare.html"]+[f"california/{slug(c)}.html" for c,_ in CITIES]
+urls=["","services/index.html","about.html","contact.html","quote.html","privacy.html","california/index.html"]+[f"services/{s}.html" for s,_,_ in SERVICES]+["services/medicare.html"]+[f"california/{slug(c)}.html" for c,_ in CITIES]
 with open(os.path.join(OUT,"sitemap.xml"),"w") as f:
     f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
     for u in urls: f.write(f"  <url><loc>{BASE}/{u}</loc></url>\n")
