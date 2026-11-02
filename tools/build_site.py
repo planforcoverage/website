@@ -57,7 +57,7 @@ def footer(depth, p=None):
     </div>
     <div>
       <h3>Pages</h3>
-      <p><a href="{p}services/index.html">Services</a><br><a href="{p}about.html">About</a><br><a href="{p}contact.html">Request a quote</a><br><a href="{p}privacy.html">Privacy policy</a></p>
+      <p><a href="{p}services/index.html">Services</a><br><a href="{p}about.html">About</a><br><a href="{p}contact.html">Request a quote</a><br><a href="{p}privacy.html">Privacy policy</a><br><a href="{p}terms.html">SMS terms</a></p>
     </div>
   </div>
   <p class="foot-legal">© 2026 Plan For Coverage. Licensed in {", ".join(STATES)}. Not affiliated with or endorsed by Medicare, CMS or any government agency. Plan availability and benefits vary by state and carrier; this site is general information, not an offer of coverage.</p>
@@ -324,7 +324,7 @@ contact = f"""
     <label>What are you looking for? <select name="interest">{svc_opts}</select></label>
     <label>How many people need coverage? <input name="household" placeholder="e.g. 2 adults, 1 child"></label>
     <label>Anything else I should know? <textarea name="notes" rows="5" placeholder="Doctors you want to keep, prescriptions, budget, when you need coverage to start"></textarea></label>
-    <label class="check"><input type="checkbox" name="consent" required> By providing a telephone number and submitting this form, I consent to be contacted by SMS text message from Plan For Coverage about my request. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out, HELP for help, or call <a href="tel:+14243629253">(424) 362-9253</a>. See the <a href="privacy.html">privacy policy</a>.</label>
+    <label class="check"><input type="checkbox" name="consent"> I agree to receive text messages from Plan For Coverage about my request at the number I provided. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out, HELP for help, or call <a href="tel:+14243629253">(424) 362-9253</a>. Consent is not a condition of submitting this form. See the <a href="privacy.html">privacy policy</a> and <a href="terms.html">SMS terms</a>.</label>
     <button class="btn btn-amber" type="submit">Send request</button>
     <p class="form-note">Your information is used only to prepare your quote. It is never sold or shared with lead buyers.</p>
   </form>
@@ -387,7 +387,7 @@ quote = """
       <label>Phone <input type="tel" name="phone" autocomplete="tel"></label>
       <label>Anything else? <textarea name="notes" rows="4" placeholder="Doctors, prescriptions, budget, when you need coverage"></textarea></label>
       <input type="hidden" name="interest" value="Live quote request (API fallback)">
-      <label class="check"><input type="checkbox" name="consent" required> By providing a telephone number and submitting this form, I consent to be contacted by SMS text message from Plan For Coverage about my request. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out, HELP for help, or call (424) 362-9253.</label>
+      <label class="check"><input type="checkbox" name="consent"> I agree to receive text messages from Plan For Coverage about my request at the number I provided. Message frequency may vary. Message and data rates may apply. Reply STOP to opt out, HELP for help, or call <a href="tel:+14243629253">(424) 362-9253</a>. Consent is not a condition of submitting this form. See the <a href="privacy.html">privacy policy</a> and <a href="terms.html">SMS terms</a>.</label>
       <button class="btn btn-amber" type="submit">Send quote request</button>
     </form>
   </div>
@@ -618,13 +618,35 @@ privacy = f"""
 <h2>How I use it</h2>
 <p>Your information is used to prepare quotes, enroll you in coverage you choose, service your policy and contact you about your request. I do not sell your information, and I do not share it with lead generators, marketers or other agents.</p>
 <h2>Text messages</h2>
-<p>By providing a phone number and checking the consent box, you agree to receive calls and text messages from Plan For Coverage about your request. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of purchase.</p>
+<p>By providing a phone number and checking the consent box, you agree to receive text messages from Plan For Coverage about your request. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is not a condition of purchase or service.</p>
 <h2>Third parties</h2>
 <p>The quote form is processed by a form service that transmits submissions to me by email. This site is hosted on GitHub Pages, which may log standard server data such as IP addresses. No analytics or advertising cookies are set by this site.</p>
 <h2>Your choices</h2>
 <p>You may ask me to correct or delete the information I hold about you at any time by emailing <a href="mailto:{EMAIL}">{EMAIL}</a>, subject to record‑keeping requirements imposed by insurance regulators.</p>
 </div></section>"""
 page("privacy.html","Privacy policy","How Plan For Coverage collects, uses and protects your information.",privacy)
+
+# ---------- SMS TERMS ----------
+terms = f"""
+<section class="page-head"><div class="wrap"><h1>SMS terms</h1>
+<p class="lede">Last updated November 2026</p></div></section>
+<section class="detail"><div class="wrap narrow prose">
+<h2>The SMS program</h2>
+<p>Plan For Coverage sends text messages about the quote or coverage request you submit through this website. These messages may include follow-up questions, quote information and replies to your request.</p>
+<h2>What opting in means</h2>
+<p>Checking the text message box on a form means you agree to receive text messages from Plan For Coverage about your request at the number you provided. The box is optional, and you can submit the form without checking it.</p>
+<h2>Message frequency and cost</h2>
+<p>Message frequency may vary. Message and data rates may apply, according to your mobile plan.</p>
+<h2>How to opt out or get help</h2>
+<p>Reply STOP to any message to opt out. Reply HELP for help, call <a href="tel:{PHONE_TEL}">{PHONE}</a> or email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
+<h2>Consent is not required</h2>
+<p>Consent to receive text messages is not a condition of purchase or service.</p>
+<h2>Privacy</h2>
+<p>I do not sell your mobile number, and I do not share it with lead buyers, marketers or other agents. See the <a href="privacy.html">privacy policy</a> for how your information is handled.</p>
+<h2>Carrier liability</h2>
+<p>Mobile carriers are not liable for delayed or undelivered messages.</p>
+</div></section>"""
+page("terms.html","SMS terms","Terms for text messages from Plan For Coverage: opting in, message frequency and cost, opting out and privacy.",terms)
 
 # ---------- 404 ----------
 # GitHub Pages serves this for any missing path, at that path's depth, so it
@@ -644,6 +666,7 @@ notfound = """
     '/live-quote': '/quote.html', '/livequote': '/quote.html', '/get-a-quote': '/quote.html',
     '/contact': '/contact.html', '/contact.htm': '/contact.html', '/contact.html': '/contact.html',
     '/about': '/about.html', '/about.html': '/about.html', '/privacy': '/privacy.html', '/privacy.html': '/privacy.html',
+    '/terms': '/terms.html', '/terms.html': '/terms.html',
     '/index': '/', '/index.htm': '/', '/home': '/'};
   var path = location.pathname;
   try { path = decodeURIComponent(path); } catch (_) {}
@@ -702,7 +725,7 @@ for city, county in CITIES:
 
 # sitemap + robots
 BASE="https://planforcoverage.com"
-urls=["","services/index.html","about.html","contact.html","quote.html","privacy.html","california/index.html"]+[f"services/{s}.html" for s,_,_ in SERVICES]+["services/medicare.html"]+[f"california/{slug(c)}.html" for c,_ in CITIES]
+urls=["","services/index.html","about.html","contact.html","quote.html","privacy.html","terms.html","california/index.html"]+[f"services/{s}.html" for s,_,_ in SERVICES]+["services/medicare.html"]+[f"california/{slug(c)}.html" for c,_ in CITIES]
 with open(os.path.join(OUT,"sitemap.xml"),"w") as f:
     f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
     for u in urls: f.write(f"  <url><loc>{BASE}/{u}</loc></url>\n")
